@@ -152,7 +152,7 @@ async function generateJS(options, overlayFS) {
     workingDir: process.cwd()
   });
 
-  let dir = path.relative(__dirname, path.join(process.cwd(), stories[0].directory));
+  let dir = path.relative(__dirname, path.join(process.cwd(), stories[0].directory)).replace(/\\/g, '/');
   let files = stories[0].files;
 
   let previewScript = `
@@ -166,8 +166,8 @@ async function generateJS(options, overlayFS) {
       addArgsEnhancer
     } from '@storybook/client-api';
     import { logger } from '@storybook/client-logger';
-    import * as stories from '${path.join(dir, files)}';
-    ${configs.map((config, i) => `import * as config_${i} from '${path.relative(__dirname, config)}';`).join('\n')}
+    import * as stories from '${path.join(dir, files).replace(/\\/g, '/')}';
+    ${configs.map((config, i) => `import * as config_${i} from '${path.relative(__dirname, config).replace(/\\/g, '/')}';`).join('\n')}
     let configs = [${configs.map((_, i) => `config_${i}`)}];
 
     configs.forEach(config => {
